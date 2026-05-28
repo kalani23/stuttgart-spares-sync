@@ -7,15 +7,15 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg:       #0a0a0b;
-    --surface:  #111113;
-    --border:   #1e1e22;
-    --accent:   #e8ff47;
-    --red:      #ff4d4d;
-    --green:    #47ffb2;
-    --muted:    #555560;
-    --text:     #e8e8f0;
-    --subtext:  #888898;
+    --bg:      #0a0a0b;
+    --surface: #111113;
+    --border:  #1e1e22;
+    --accent:  #e8ff47;
+    --red:     #ff4d4d;
+    --green:   #47ffb2;
+    --muted:   #555560;
+    --text:    #e8e8f0;
+    --subtext: #888898;
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -25,28 +25,22 @@
     color: var(--text);
     font-family: 'Syne', sans-serif;
     min-height: 100vh;
-    padding: 0;
   }
 
-  /* ── Header ── */
   header {
     border-bottom: 1px solid var(--border);
-    padding: 28px 40px;
+    padding: 24px 40px;
     display: flex;
     align-items: center;
     justify-content: space-between;
     position: sticky;
     top: 0;
-    background: rgba(10,10,11,0.92);
+    background: rgba(10,10,11,0.95);
     backdrop-filter: blur(12px);
     z-index: 100;
   }
 
-  .logo {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
+  .logo { display: flex; align-items: center; gap: 12px; }
 
   .logo-mark {
     width: 32px; height: 32px;
@@ -55,22 +49,8 @@
     display: flex; align-items: center; justify-content: center;
   }
 
-  .logo-mark svg { width: 18px; height: 18px; }
-
-  .logo h1 {
-    font-size: 16px;
-    font-weight: 700;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-  }
-
-  .logo span {
-    font-family: 'DM Mono', monospace;
-    font-size: 11px;
-    color: var(--muted);
-    display: block;
-    letter-spacing: 0.08em;
-  }
+  .logo h1 { font-size: 16px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; }
+  .logo span { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--muted); display: block; }
 
   #trigger-btn {
     background: var(--accent);
@@ -85,16 +65,13 @@
     border-radius: 8px;
     cursor: pointer;
     transition: all 0.2s;
-    display: flex;
-    align-items: center;
-    gap: 8px;
+    display: flex; align-items: center; gap: 8px;
   }
 
   #trigger-btn:hover { background: #f5ff6e; transform: translateY(-1px); }
-  #trigger-btn:active { transform: translateY(0); }
   #trigger-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
 
-  #trigger-btn .spinner {
+  .spinner {
     width: 14px; height: 14px;
     border: 2px solid #00000040;
     border-top-color: #000;
@@ -108,195 +85,47 @@
 
   @keyframes spin { to { transform: rotate(360deg); } }
 
-  /* ── Main layout ── */
-  main {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 40px;
-  }
+  main { max-width: 1100px; margin: 0 auto; padding: 40px; }
 
   /* ── Status banner ── */
   #status-banner {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 20px 28px;
+    padding: 18px 24px;
     border-radius: 12px;
     border: 1px solid var(--border);
     background: var(--surface);
-    margin-bottom: 32px;
-    animation: fadeIn 0.4s ease;
+    margin-bottom: 24px;
   }
 
   #status-banner.success { border-color: #47ffb240; background: #47ffb208; }
   #status-banner.error   { border-color: #ff4d4d40; background: #ff4d4d08; }
 
-  .status-left { display: flex; align-items: center; gap: 14px; }
+  .status-left { display: flex; align-items: center; gap: 12px; }
 
   .status-dot {
-    width: 10px; height: 10px;
+    width: 8px; height: 8px;
     border-radius: 50%;
     background: var(--muted);
     flex-shrink: 0;
   }
 
-  .status-dot.success { background: var(--green); box-shadow: 0 0 8px var(--green); }
+  .status-dot.success { background: var(--green); box-shadow: 0 0 8px var(--green); animation: pulse 2s infinite; }
   .status-dot.error   { background: var(--red);   box-shadow: 0 0 8px var(--red); }
-  .status-dot.pulse   { animation: pulse 2s infinite; }
 
-  @keyframes pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.3; }
-  }
+  @keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:0.3; } }
 
-  .status-label {
-    font-size: 14px;
-    font-weight: 600;
-    letter-spacing: 0.04em;
-  }
+  .status-label { font-size: 14px; font-weight: 600; }
+  .status-time  { font-family: 'DM Mono', monospace; font-size: 12px; color: var(--subtext); }
+  .status-elapsed { font-family: 'DM Mono', monospace; font-size: 12px; color: var(--muted); }
 
-  .status-time {
-    font-family: 'DM Mono', monospace;
-    font-size: 12px;
-    color: var(--subtext);
-  }
-
-  .status-elapsed {
-    font-family: 'DM Mono', monospace;
-    font-size: 12px;
-    color: var(--muted);
-    text-align: right;
-  }
-
-  /* ── Stats grid ── */
-  .stats-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 16px;
-    margin-bottom: 32px;
-  }
-
-  .stat-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 24px;
-    animation: fadeUp 0.4s ease both;
-  }
-
-  .stat-card:nth-child(1) { animation-delay: 0.05s; }
-  .stat-card:nth-child(2) { animation-delay: 0.10s; }
-  .stat-card:nth-child(3) { animation-delay: 0.15s; }
-  .stat-card:nth-child(4) { animation-delay: 0.20s; }
-
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(12px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-
-  @keyframes fadeIn {
-    from { opacity: 0; }
-    to   { opacity: 1; }
-  }
-
-  .stat-label {
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--subtext);
-    margin-bottom: 12px;
-  }
-
-  .stat-value {
-    font-size: 36px;
-    font-weight: 800;
-    letter-spacing: -0.02em;
-    line-height: 1;
-    color: var(--text);
-  }
-
-  .stat-value.green { color: var(--green); }
-  .stat-value.red   { color: var(--red); }
-  .stat-value.accent { color: var(--accent); }
-
-  .stat-sub {
-    font-family: 'DM Mono', monospace;
-    font-size: 11px;
-    color: var(--muted);
-    margin-top: 8px;
-  }
-
-  /* ── Two column layout ── */
-  .cols {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
-    margin-bottom: 32px;
-  }
-
-  /* ── Chart ── */
-  .card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 24px;
-  }
-
-  .card-title {
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--subtext);
-    margin-bottom: 20px;
-  }
-
-  /* Stock bar */
-  .stock-bar-wrap {
-    margin-top: 8px;
-  }
-
-  .stock-bar {
-    height: 8px;
-    border-radius: 4px;
-    background: var(--border);
-    overflow: hidden;
-    margin: 8px 0;
-  }
-
-  .stock-bar-fill {
-    height: 100%;
-    border-radius: 4px;
-    background: var(--green);
-    transition: width 1s ease;
-  }
-
-  .stock-bar-labels {
-    display: flex;
-    justify-content: space-between;
-    font-family: 'DM Mono', monospace;
-    font-size: 12px;
-    color: var(--subtext);
-  }
-
-  .stock-bar-labels span:first-child { color: var(--green); }
-  .stock-bar-labels span:last-child  { color: var(--red); }
-
-  /* Sparkline */
-  #sparkline-canvas {
-    width: 100%;
-    height: 120px;
-    display: block;
-  }
-
-  /* ── History table ── */
+  /* ── Table ── */
   .table-wrap {
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: 12px;
     overflow: hidden;
-    margin-bottom: 32px;
   }
 
   .table-header {
@@ -307,10 +136,22 @@
     justify-content: space-between;
   }
 
-  table {
-    width: 100%;
-    border-collapse: collapse;
+  .table-title {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--subtext);
   }
+
+  .schedule-info {
+    display: flex; align-items: center; gap: 6px;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+  }
+
+  table { width: 100%; border-collapse: collapse; }
 
   thead th {
     font-size: 10px;
@@ -338,12 +179,13 @@
     color: var(--subtext);
   }
 
-  td.date-col { color: var(--text); font-size: 12px; }
+  td.date-col { color: var(--text); }
+  td.updated-col { color: var(--accent); font-weight: 500; }
+  td.instock-col { color: var(--green); }
+  td.skus-col { color: var(--text); }
 
   .badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
+    display: inline-flex; align-items: center; gap: 5px;
     padding: 3px 10px;
     border-radius: 20px;
     font-size: 10px;
@@ -354,21 +196,53 @@
 
   .badge.success { background: #47ffb215; color: var(--green); }
   .badge.error   { background: #ff4d4d15; color: var(--red); }
-  .badge.dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+  .badge.dryrun  { background: #ffffff10; color: var(--subtext); }
+  .badge-dot { width: 5px; height: 5px; border-radius: 50%; background: currentColor; }
 
-  td.updated-col { color: var(--accent); }
-  td.skus-col    { color: var(--text); }
+  /* changes detail */
+  .changes-cell { cursor: pointer; }
+  .changes-cell:hover { color: var(--accent); }
 
-  /* ── Trigger modal ── */
+  .changes-list {
+    display: none;
+    padding: 12px 24px 12px 48px;
+    background: #ffffff04;
+    border-top: 1px solid var(--border);
+  }
+
+  .changes-list.open { display: block; }
+
+  .change-row {
+    display: flex; gap: 16px; align-items: center;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--subtext);
+    padding: 4px 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .change-row:last-child { border-bottom: none; }
+  .change-sku  { color: var(--text); width: 80px; }
+  .change-dir  { width: 100px; }
+  .change-dir.up   { color: var(--green); }
+  .change-dir.down { color: var(--red); }
+
+  .empty-state {
+    text-align: center;
+    padding: 48px;
+    color: var(--muted);
+    font-size: 13px;
+    letter-spacing: 0.06em;
+  }
+
+  /* Modal */
   #modal-overlay {
     display: none;
-    position: fixed;
-    inset: 0;
+    position: fixed; inset: 0;
     background: rgba(0,0,0,0.7);
     backdrop-filter: blur(4px);
     z-index: 200;
-    align-items: center;
-    justify-content: center;
+    align-items: center; justify-content: center;
   }
 
   #modal-overlay.visible { display: flex; }
@@ -378,32 +252,19 @@
     border: 1px solid var(--border);
     border-radius: 16px;
     padding: 32px;
-    max-width: 480px;
-    width: 90%;
+    max-width: 460px; width: 90%;
     animation: fadeUp 0.3s ease;
   }
 
-  #modal h2 {
-    font-size: 20px;
-    font-weight: 700;
-    margin-bottom: 8px;
-  }
+  @keyframes fadeUp { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
 
-  #modal p {
-    color: var(--subtext);
-    font-size: 14px;
-    line-height: 1.6;
-    margin-bottom: 24px;
-  }
+  #modal h2 { font-size: 18px; font-weight: 700; margin-bottom: 8px; }
+  #modal p  { color: var(--subtext); font-size: 13px; line-height: 1.6; margin-bottom: 20px; }
 
-  .modal-input-label {
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--subtext);
-    margin-bottom: 8px;
-    display: block;
+  .modal-label {
+    font-size: 10px; font-weight: 600;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--subtext); display: block; margin-bottom: 6px;
   }
 
   .modal-input {
@@ -411,117 +272,55 @@
     background: var(--bg);
     border: 1px solid var(--border);
     border-radius: 8px;
-    padding: 12px 16px;
+    padding: 10px 14px;
     font-family: 'DM Mono', monospace;
     font-size: 13px;
     color: var(--text);
     outline: none;
-    margin-bottom: 20px;
+    margin-bottom: 16px;
     transition: border-color 0.2s;
   }
 
   .modal-input:focus { border-color: var(--accent); }
 
-  .modal-actions {
-    display: flex;
-    gap: 10px;
-    justify-content: flex-end;
-  }
+  .modal-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 4px; }
 
   .btn-cancel {
-    background: transparent;
-    border: 1px solid var(--border);
-    color: var(--subtext);
-    padding: 10px 20px;
-    border-radius: 8px;
-    font-family: 'Syne', sans-serif;
-    font-size: 13px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s;
+    background: transparent; border: 1px solid var(--border);
+    color: var(--subtext); padding: 9px 18px; border-radius: 8px;
+    font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 600;
+    cursor: pointer; transition: all 0.2s;
   }
 
   .btn-cancel:hover { border-color: var(--muted); color: var(--text); }
 
   .btn-confirm {
-    background: var(--accent);
-    border: none;
-    color: #000;
-    padding: 10px 20px;
-    border-radius: 8px;
-    font-family: 'Syne', sans-serif;
-    font-size: 13px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: all 0.2s;
+    background: var(--accent); border: none; color: #000;
+    padding: 9px 18px; border-radius: 8px;
+    font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700;
+    cursor: pointer; transition: background 0.2s;
   }
 
   .btn-confirm:hover { background: #f5ff6e; }
 
   #toast {
-    position: fixed;
-    bottom: 32px;
-    right: 32px;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 14px 20px;
-    font-size: 13px;
-    font-weight: 600;
+    position: fixed; bottom: 28px; right: 28px;
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 10px; padding: 12px 18px;
+    font-size: 13px; font-weight: 600;
     z-index: 300;
-    transform: translateY(80px);
-    opacity: 0;
+    transform: translateY(60px); opacity: 0;
     transition: all 0.3s ease;
-    display: flex;
-    align-items: center;
-    gap: 10px;
   }
 
   #toast.show { transform: translateY(0); opacity: 1; }
   #toast.success { border-color: #47ffb240; color: var(--green); }
   #toast.error   { border-color: #ff4d4d40; color: var(--red); }
 
-  .loading-state {
-    text-align: center;
-    padding: 60px;
-    color: var(--muted);
-    font-size: 13px;
-    letter-spacing: 0.06em;
-  }
-
-  .loading-state .dots::after {
-    content: '';
-    animation: dots 1.5s infinite;
-  }
-
-  @keyframes dots {
-    0%   { content: '.'; }
-    33%  { content: '..'; }
-    66%  { content: '...'; }
-  }
-
-  /* ── Schedule info ── */
-  .schedule-info {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-family: 'DM Mono', monospace;
-    font-size: 12px;
-    color: var(--muted);
-    margin-top: 8px;
-  }
-
-  .schedule-info svg { width: 12px; height: 12px; opacity: 0.5; }
-
-  @media (max-width: 900px) {
-    .stats-grid { grid-template-columns: repeat(2, 1fr); }
-    .cols { grid-template-columns: 1fr; }
-    main { padding: 24px; }
-    header { padding: 20px 24px; }
-  }
-
   @media (max-width: 600px) {
-    .stats-grid { grid-template-columns: 1fr 1fr; }
+    main { padding: 20px; }
+    header { padding: 16px 20px; }
+    thead th, tbody td { padding: 10px 14px; }
   }
 </style>
 </head>
@@ -530,8 +329,8 @@
 <header>
   <div class="logo">
     <div class="logo-mark">
-      <svg viewBox="0 0 18 18" fill="none">
-        <path d="M9 2L15 6V12L9 16L3 12V6L9 2Z" stroke="#000" stroke-width="1.5" fill="none"/>
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+        <path d="M9 2L15 6V12L9 16L3 12V6L9 2Z" stroke="#000" stroke-width="1.5"/>
         <circle cx="9" cy="9" r="2" fill="#000"/>
       </svg>
     </div>
@@ -547,50 +346,61 @@
 </header>
 
 <main>
-  <div id="loading" class="loading-state">Loading sync data<span class="dots"></span></div>
-  <div id="dashboard" style="display:none">
 
-    <!-- History table -->
-    <div class="table-wrap">
-      <div class="table-header">
-        <div class="card-title" style="margin:0">Run History</div>
-        <div class="schedule-info">
-          <svg viewBox="0 0 12 12" fill="none">
-            <circle cx="6" cy="6" r="5" stroke="currentColor" stroke-width="1.2"/>
-            <path d="M6 3.5V6L7.5 7.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
-          </svg>
-          Scheduled daily at 06:00 UTC
-        </div>
+  <!-- Status banner -->
+  <div id="status-banner">
+    <div class="status-left">
+      <div class="status-dot" id="status-dot"></div>
+      <div>
+        <div class="status-label" id="status-label">Loading...</div>
+        <div class="status-time"  id="status-time">—</div>
       </div>
-      <table>
-        <thead>
-          <tr>
-            <th>Date / Time</th>
-            <th>Status</th>
-            <th>SKUs Found</th>
-            <th>In Stock</th>
-            <th>Updated</th>
-            <th>Elapsed</th>
-          </tr>
-        </thead>
-        <tbody id="history-tbody">
-          <tr><td colspan="6" style="text-align:center; padding:32px; color:var(--muted)">No runs yet</td></tr>
-        </tbody>
-      </table>
     </div>
-
+    <div class="status-elapsed" id="status-elapsed">—</div>
   </div>
+
+  <!-- Run history table -->
+  <div class="table-wrap">
+    <div class="table-header">
+      <div class="table-title">Run History</div>
+      <div class="schedule-info">
+        <svg width="11" height="11" viewBox="0 0 12 12" fill="none">
+          <circle cx="6" cy="6" r="5" stroke="currentColor" stroke-width="1.2"/>
+          <path d="M6 3.5V6L7.5 7.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+        </svg>
+        Daily at 06:00 UTC
+      </div>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>Date / Time</th>
+          <th>Status</th>
+          <th>SKUs Scraped</th>
+          <th>In Stock</th>
+          <th>Out of Stock</th>
+          <th>Shopify Updated</th>
+          <th>Elapsed</th>
+          <th>Changes</th>
+        </tr>
+      </thead>
+      <tbody id="history-tbody">
+        <tr><td colspan="8" class="empty-state">Loading...</td></tr>
+      </tbody>
+    </table>
+  </div>
+
 </main>
 
 <!-- Modal -->
 <div id="modal-overlay">
   <div id="modal">
     <h2>Trigger Manual Sync</h2>
-    <p>This will start a full stock sync immediately. Enter your GitHub Personal Access Token with <code style="background:#ffffff10; padding:2px 6px; border-radius:4px; font-size:12px;">workflow</code> scope.</p>
-    <label class="modal-input-label">GitHub PAT Token</label>
+    <p>Starts a full stock sync immediately on GitHub Actions.</p>
+    <label class="modal-label">GitHub PAT Token</label>
     <input class="modal-input" type="password" id="pat-input" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx">
-    <label class="modal-input-label">GitHub Repo (owner/repo)</label>
-    <input class="modal-input" type="text" id="repo-input" placeholder="yourusername/stuttgart-spares-sync" value="">
+    <label class="modal-label">Repo (owner/repo)</label>
+    <input class="modal-input" type="text" id="repo-input" placeholder="kalani23/stuttgart-spares-sync">
     <div class="modal-actions">
       <button class="btn-cancel" onclick="closeModal()">Cancel</button>
       <button class="btn-confirm" onclick="triggerSync()">▶ Run Now</button>
@@ -598,171 +408,103 @@
   </div>
 </div>
 
-<!-- Toast -->
 <div id="toast"></div>
 
 <script>
-// ── Config ────────────────────────────────────────────────────────────────────
-
-// Update this to your actual repo: "owner/repo-name"
-const GITHUB_REPO = localStorage.getItem('gh_repo') || '';
 const WORKFLOW_ID = 'stock_sync.yml';
 
-// ── Load and render data ──────────────────────────────────────────────────────
+// ── Load data ─────────────────────────────────────────────────────────────────
 
 async function loadData() {
   try {
-    // Load sync_log.json from same repo (GitHub Pages serves it)
     const res = await fetch('./sync_log.json?t=' + Date.now());
-    if (!res.ok) throw new Error('No sync log found');
+    if (!res.ok) throw new Error('not found');
     const logs = await res.json();
+    if (!logs.length) throw new Error('empty');
     render(logs);
-  } catch (e) {
-    document.getElementById('loading').innerHTML =
-      '<div style="color:var(--muted); padding:60px; text-align:center">No sync data yet — run the script once to populate this dashboard.</div>';
+  } catch(e) {
+    document.getElementById('status-label').textContent = 'No sync data yet';
+    document.getElementById('history-tbody').innerHTML =
+      '<tr><td colspan="8" class="empty-state">No runs yet — trigger a sync to get started.</td></tr>';
   }
 }
 
 function render(logs) {
-  document.getElementById('loading').style.display = 'none';
-  document.getElementById('dashboard').style.display = 'block';
-
-  // Latest run
   const latest = logs[logs.length - 1];
+  const ok = !latest.errors && latest.status !== 'error';
 
-  // Status banner
-  const isSuccess = latest.status !== 'error' && !latest.errors;
+  // Banner
   const dot = document.getElementById('status-dot');
-  dot.className = 'status-dot ' + (isSuccess ? 'success pulse' : 'error pulse');
+  dot.className = 'status-dot ' + (ok ? 'success' : 'error');
   document.getElementById('status-label').textContent =
-    isSuccess ? '✓ Last sync successful' : '⚠ Last sync had errors';
-  document.getElementById('status-time').textContent =
-    'Run at ' + formatDate(latest.run_at);
+    ok ? '✓ Last sync successful' : '⚠ Last sync had errors';
+  document.getElementById('status-time').textContent = 'Run at ' + fmtDate(latest.run_at);
   document.getElementById('status-elapsed').textContent =
-    latest.elapsed_sec ? `${latest.elapsed_sec}s (${(latest.elapsed_sec/60).toFixed(1)} min)` : '—';
+    latest.elapsed_sec ? latest.elapsed_sec + 's (' + (latest.elapsed_sec/60).toFixed(1) + ' min)' : '—';
+  document.getElementById('status-banner').className = ok ? 'success' : 'error';
 
-  const banner = document.getElementById('status-banner');
-  banner.className = isSuccess ? 'success' : 'error';
-
-  // Stats
-  const skus     = latest.partworks_skus || 0;
-  const inStock  = latest.in_stock || 0;
-  const outStock = latest.out_of_stock || (skus - inStock);
-  const pctIn    = skus ? Math.round(inStock / skus * 100) : 0;
-
-  document.getElementById('stat-skus').textContent      = fmt(skus);
-  document.getElementById('stat-skus-sub').textContent  = `across all categories`;
-  document.getElementById('stat-instock').textContent   = fmt(inStock);
-  document.getElementById('stat-instock-pct').textContent = `${pctIn}% of catalogue`;
-  document.getElementById('stat-outstock').textContent  = fmt(outStock);
-  document.getElementById('stat-outstock-pct').textContent = `${100-pctIn}% of catalogue`;
-  document.getElementById('stat-updated').textContent   = fmt(latest.updated || 0);
-  document.getElementById('stat-nochange').textContent  = `${fmt(latest.no_change || 0)} unchanged`;
-
-  // Stock bar
-  document.getElementById('bar-instock-label').textContent = fmt(inStock) + ' in stock';
-  document.getElementById('bar-total-label').textContent   = fmt(skus) + ' total';
-  setTimeout(() => {
-    document.getElementById('stock-bar-fill').style.width = pctIn + '%';
-  }, 200);
-  document.getElementById('bar-instock-pct').textContent  = pctIn + '% in stock';
-  document.getElementById('bar-outstock-pct').textContent = (100-pctIn) + '% out of stock';
-
-  // Shopify
-  document.getElementById('shopify-total').textContent    = fmt(latest.shopify_products || 0);
-  document.getElementById('shopify-notfound').textContent = fmt(latest.not_found || 0);
-
-  // Sparkline
-  drawSparkline(logs.slice(-20));
-
-  // History table
+  // Table — newest first
   const tbody = document.getElementById('history-tbody');
-  const rows = [...logs].reverse().slice(0, 30).map(run => {
-    const ok = run.status !== 'error' && !run.errors;
-    const badge = ok
-      ? `<span class="badge success"><span class="dot"></span>Success</span>`
-      : `<span class="badge error"><span class="dot"></span>Error</span>`;
-    return `<tr>
-      <td class="date-col">${formatDate(run.run_at)}</td>
-      <td>${run.dry_run ? '<span class="badge" style="background:#ffffff10;color:var(--subtext)">Dry Run</span>' : badge}</td>
-      <td class="skus-col">${fmt(run.partworks_skus || 0)}</td>
-      <td style="color:var(--green)">${fmt(run.in_stock || 0)}</td>
-      <td class="updated-col">${fmt(run.updated || 0)}</td>
-      <td>${run.elapsed_sec ? run.elapsed_sec + 's' : '—'}</td>
-    </tr>`;
+  const rows = [...logs].reverse().map((run, idx) => {
+    const isOk      = !run.errors && run.status !== 'error';
+    const badge     = run.dry_run
+      ? `<span class="badge dryrun">Dry Run</span>`
+      : isOk
+        ? `<span class="badge success"><span class="badge-dot"></span>Success</span>`
+        : `<span class="badge error"><span class="badge-dot"></span>Error</span>`;
+
+    const inStock   = run.in_stock  ?? '—';
+    const outStock  = run.out_of_stock ?? '—';
+    const updated   = run.updated ?? 0;
+    const changes   = run.changes || [];
+    const changesTxt = changes.length
+      ? `<span class="changes-cell" onclick="toggleChanges('changes-${idx}')">${changes.length} change${changes.length>1?'s':''} ▾</span>`
+      : `<span style="color:var(--muted)">none</span>`;
+
+    const changeRows = changes.map(c => `
+      <div class="change-row">
+        <span class="change-sku">${c.sku}</span>
+        <span class="change-dir ${c.in_stock ? 'up' : 'down'}">
+          ${c.in_stock ? '↑ back in stock' : '↓ out of stock'}
+        </span>
+        <span>qty ${c.from_qty} → ${c.to_qty}</span>
+      </div>`).join('');
+
+    return `
+      <tr>
+        <td class="date-col">${fmtDate(run.run_at)}</td>
+        <td>${badge}</td>
+        <td class="skus-col">${fmt(run.partworks_skus || 0)}</td>
+        <td class="instock-col">${typeof inStock === 'number' ? fmt(inStock) : inStock}</td>
+        <td style="color:var(--red)">${typeof outStock === 'number' ? fmt(outStock) : outStock}</td>
+        <td class="updated-col">${fmt(updated)}</td>
+        <td>${run.elapsed_sec ? run.elapsed_sec + 's' : '—'}</td>
+        <td>${changesTxt}</td>
+      </tr>
+      ${changes.length ? `<tr><td colspan="8" style="padding:0"><div class="changes-list" id="changes-${idx}">${changeRows}</div></td></tr>` : ''}
+    `;
   }).join('');
-  tbody.innerHTML = rows || '<tr><td colspan="6" style="text-align:center;padding:32px;color:var(--muted)">No runs yet</td></tr>';
+
+  tbody.innerHTML = rows;
 }
 
-function drawSparkline(logs) {
-  const canvas = document.getElementById('sparkline-canvas');
-  const dpr    = window.devicePixelRatio || 1;
-  const rect   = canvas.parentElement.getBoundingClientRect();
-  canvas.width  = rect.width * dpr;
-  canvas.height = 120 * dpr;
-  const ctx = canvas.getContext('2d');
-  ctx.scale(dpr, dpr);
-
-  const W = rect.width;
-  const H = 120;
-  const pad = { top: 10, bottom: 24, left: 4, right: 4 };
-
-  const values = logs.map(r => r.updated || 0);
-  const max    = Math.max(...values, 1);
-
-  const barW   = (W - pad.left - pad.right) / Math.max(values.length, 1);
-  const barGap = barW * 0.25;
-
-  values.forEach((v, i) => {
-    const x    = pad.left + i * barW + barGap / 2;
-    const barH = ((v / max) * (H - pad.top - pad.bottom)) || 2;
-    const y    = H - pad.bottom - barH;
-
-    // Gradient
-    const grad = ctx.createLinearGradient(0, y, 0, H - pad.bottom);
-    grad.addColorStop(0, '#e8ff4788');
-    grad.addColorStop(1, '#e8ff4720');
-
-    ctx.fillStyle = grad;
-    ctx.beginPath();
-    ctx.roundRect(x, y, barW - barGap, barH, 3);
-    ctx.fill();
-
-    // Value label on top
-    if (v > 0) {
-      ctx.fillStyle = '#888898';
-      ctx.font = `${Math.min(9, barW * 0.6)}px 'DM Mono', monospace`;
-      ctx.textAlign = 'center';
-      ctx.fillText(v, x + (barW - barGap) / 2, y - 3);
-    }
-  });
-
-  // X-axis labels (dates)
-  ctx.fillStyle = '#555560';
-  ctx.font = "9px 'DM Mono', monospace";
-  ctx.textAlign = 'center';
-  logs.forEach((r, i) => {
-    const x = pad.left + i * barW + (barW - barGap) / 2;
-    const d = new Date(r.run_at);
-    const label = `${d.getMonth()+1}/${d.getDate()}`;
-    ctx.fillText(label, x, H - 6);
-  });
+function toggleChanges(id) {
+  const el = document.getElementById(id);
+  if (el) el.classList.toggle('open');
 }
 
 // ── Utils ─────────────────────────────────────────────────────────────────────
 
-function fmt(n) {
-  return n.toLocaleString();
-}
+function fmt(n) { return Number(n).toLocaleString(); }
 
-function formatDate(iso) {
+function fmtDate(iso) {
   if (!iso) return '—';
   const d = new Date(iso);
-  return d.toLocaleDateString('en-GB', { day:'2-digit', month:'short', year:'numeric' })
-    + ' ' + d.toLocaleTimeString('en-GB', { hour:'2-digit', minute:'2-digit' });
+  return d.toLocaleDateString('en-GB', {day:'2-digit', month:'short', year:'numeric'})
+    + ' ' + d.toLocaleTimeString('en-GB', {hour:'2-digit', minute:'2-digit'});
 }
 
-function showToast(msg, type = 'success') {
+function showToast(msg, type) {
   const t = document.getElementById('toast');
   t.textContent = msg;
   t.className = 'show ' + type;
@@ -784,10 +526,8 @@ function closeModal() {
 async function triggerSync() {
   const pat  = document.getElementById('pat-input').value.trim();
   const repo = document.getElementById('repo-input').value.trim();
-
-  if (!pat)  { showToast('Enter your GitHub PAT token', 'error'); return; }
-  if (!repo) { showToast('Enter your repo (owner/repo)', 'error'); return; }
-
+  if (!pat)  { showToast('Enter your GitHub PAT', 'error'); return; }
+  if (!repo) { showToast('Enter repo (owner/repo)', 'error'); return; }
   localStorage.setItem('gh_repo', repo);
   closeModal();
 
@@ -808,14 +548,13 @@ async function triggerSync() {
         body: JSON.stringify({ ref: 'main' }),
       }
     );
-
     if (res.status === 204) {
-      showToast('✓ Sync triggered — check GitHub Actions for progress', 'success');
+      showToast('✓ Sync triggered — check GitHub Actions', 'success');
     } else {
       const err = await res.json();
       showToast('Error: ' + (err.message || res.status), 'error');
     }
-  } catch (e) {
+  } catch(e) {
     showToast('Network error: ' + e.message, 'error');
   } finally {
     btn.disabled = false;
@@ -823,22 +562,11 @@ async function triggerSync() {
   }
 }
 
-// Close modal on overlay click
 document.getElementById('modal-overlay').addEventListener('click', function(e) {
   if (e.target === this) closeModal();
 });
 
-// ── Init ──────────────────────────────────────────────────────────────────────
-
 loadData();
-
-// Redraw sparkline on resize
-window.addEventListener('resize', () => {
-  fetch('./sync_log.json?t=' + Date.now())
-    .then(r => r.json())
-    .then(logs => drawSparkline(logs.slice(-20)))
-    .catch(() => {});
-});
 </script>
 </body>
 </html>
