@@ -1,15 +1,24 @@
 [
   {
-    "run_at": "2026-05-28T22:00:12.778781",
+    "run_at": "2026-05-29T03:06:43.643721",
     "dry_run": false,
-    "elapsed_sec": 680.1,
+    "elapsed_sec": 2032.3,
     "location_id": 113368236375,
     "partworks_skus": 10655,
     "shopify_products": 1806,
     "not_found_on_partworks": 20,
-    "no_change": 1786,
-    "updated": 0,
+    "no_change": 1785,
+    "updated": 1,
     "errors": 0,
-    "changes": []
+    "changes": [
+      {
+        "sku": "8011",
+        "product_id": 10896040886615,
+        "from_qty": 2,
+        "to_qty": 0,
+        "in_stock": false,
+        "timestamp": "2026-05-29T03:06:41.098548"
+      }
+    ]
   }
 ]
