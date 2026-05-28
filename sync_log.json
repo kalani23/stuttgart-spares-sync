@@ -20,5 +20,18 @@
         "timestamp": "2026-05-29T03:06:41.098548"
       }
     ]
+  },
+  {
+    "run_at": "2026-05-28T22:18:53.946190",
+    "dry_run": false,
+    "elapsed_sec": 700.7,
+    "location_id": 113368236375,
+    "partworks_skus": 10655,
+    "shopify_products": 1806,
+    "not_found_on_partworks": 20,
+    "no_change": 1786,
+    "updated": 0,
+    "errors": 0,
+    "changes": []
   }
 ]
