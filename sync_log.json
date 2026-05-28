@@ -1,1 +1,15 @@
-[]
+[
+  {
+    "run_at": "2026-05-28T22:00:12.778781",
+    "dry_run": false,
+    "elapsed_sec": 680.1,
+    "location_id": 113368236375,
+    "partworks_skus": 10655,
+    "shopify_products": 1806,
+    "not_found_on_partworks": 20,
+    "no_change": 1786,
+    "updated": 0,
+    "errors": 0,
+    "changes": []
+  }
+]
