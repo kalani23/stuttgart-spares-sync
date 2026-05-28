@@ -1,1 +1,35 @@
+name: Daily Stock Sync
 
+on:
+  schedule:
+    - cron: '0 6 * * *'   # 6:00 AM UTC daily
+  workflow_dispatch:        # manual trigger button in GitHub UI + dashboard
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run stock sync
+        env:
+          SHOPIFY_TOKEN: ${{ secrets.SHOPIFY_TOKEN }}
+        run: python stock_sync.py
+
+      - name: Commit updated sync_log.json and stock_map.json
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add sync_log.json stock_map.json
+          git diff --staged --quiet || git commit -m "chore: sync run $(date -u +'%Y-%m-%d %H:%M UTC')"
+          git push
