@@ -441,5 +441,83 @@
         "timestamp": "2026-06-01T20:27:04.378869"
       }
     ]
+  },
+  {
+    "run_at": "2026-06-02T19:51:03.484495",
+    "dry_run": false,
+    "elapsed_sec": 559.4,
+    "location_id": 113368236375,
+    "partworks_skus": 10679,
+    "shopify_products": 1813,
+    "not_found_on_partworks": 23,
+    "no_change": 1782,
+    "updated": 8,
+    "errors": 0,
+    "changes": [
+      {
+        "sku": "12079",
+        "product_id": 10896174055767,
+        "from_qty": 3,
+        "to_qty": 2,
+        "in_stock": true,
+        "timestamp": "2026-06-02T19:50:53.815100"
+      },
+      {
+        "sku": "6658",
+        "product_id": 10895984361815,
+        "from_qty": 2,
+        "to_qty": 0,
+        "in_stock": false,
+        "timestamp": "2026-06-02T19:50:54.979981"
+      },
+      {
+        "sku": "3319",
+        "product_id": 10896132243799,
+        "from_qty": 2,
+        "to_qty": 0,
+        "in_stock": false,
+        "timestamp": "2026-06-02T19:50:56.190553"
+      },
+      {
+        "sku": "17644",
+        "product_id": 10896143221079,
+        "from_qty": 2,
+        "to_qty": 0,
+        "in_stock": false,
+        "timestamp": "2026-06-02T19:50:57.433376"
+      },
+      {
+        "sku": "5397",
+        "product_id": 10895957229911,
+        "from_qty": 0,
+        "to_qty": 2,
+        "in_stock": true,
+        "timestamp": "2026-06-02T19:50:58.670773"
+      },
+      {
+        "sku": "7135",
+        "product_id": 10895976169815,
+        "from_qty": 2,
+        "to_qty": 0,
+        "in_stock": false,
+        "timestamp": "2026-06-02T19:50:59.862374"
+      },
+      {
+        "sku": "17887",
+        "product_id": 10625942946135,
+        "from_qty": 2,
+        "to_qty": 0,
+        "in_stock": false,
+        "timestamp": "2026-06-02T19:51:01.041019"
+      },
+      {
+        "sku": "7814",
+        "product_id": 10395970634071,
+        "from_qty": 1,
+        "to_qty": 2,
+        "in_stock": true,
+        "timestamp": "2026-06-02T19:51:02.269437"
+      }
+    ]
   }
 ]
