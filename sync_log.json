@@ -691,5 +691,51 @@
         "timestamp": "2026-06-04T18:29:45.915188"
       }
     ]
+  },
+  {
+    "run_at": "2026-06-05T19:11:49.545671",
+    "dry_run": false,
+    "elapsed_sec": 4561.6,
+    "location_id": 113368236375,
+    "partworks_skus": 6074,
+    "shopify_products": 1813,
+    "not_found_on_partworks": 1239,
+    "no_change": 570,
+    "updated": 4,
+    "errors": 0,
+    "changes": [
+      {
+        "sku": "13339",
+        "product_id": 10767126757719,
+        "from_qty": 1,
+        "to_qty": 2,
+        "in_stock": true,
+        "timestamp": "2026-06-05T19:11:44.694786"
+      },
+      {
+        "sku": "3051",
+        "product_id": 10896009658711,
+        "from_qty": 1,
+        "to_qty": 2,
+        "in_stock": true,
+        "timestamp": "2026-06-05T19:11:45.927861"
+      },
+      {
+        "sku": "12079",
+        "product_id": 10896174055767,
+        "from_qty": 3,
+        "to_qty": 2,
+        "in_stock": true,
+        "timestamp": "2026-06-05T19:11:47.123285"
+      },
+      {
+        "sku": "16516",
+        "product_id": 10451108594007,
+        "from_qty": 2,
+        "to_qty": 0,
+        "in_stock": false,
+        "timestamp": "2026-06-05T19:11:48.327111"
+      }
+    ]
   }
 ]
