@@ -780,5 +780,18 @@
     "updated": 0,
     "errors": 0,
     "changes": []
+  },
+  {
+    "run_at": "2026-06-08T18:29:16.696181",
+    "dry_run": false,
+    "elapsed_sec": 191.1,
+    "location_id": 113368236375,
+    "partworks_skus": 0,
+    "shopify_products": 1813,
+    "not_found_on_partworks": 1813,
+    "no_change": 0,
+    "updated": 0,
+    "errors": 0,
+    "changes": []
   }
 ]
