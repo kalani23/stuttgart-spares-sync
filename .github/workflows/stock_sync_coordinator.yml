@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  # ── Phase 1: Discover all pages and split into chunks ─────────────────────
+  # ── Phase 1: Discover all pages, split into chunks ────────────────────────
   discover:
     runs-on: ubuntu-latest
     outputs:
@@ -16,7 +16,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-      - run: pip install -r requirements.txt
+      - run: pip install requests beautifulsoup4 lxml
       - run: python stock_sync_discover.py
       - id: split
         run: echo "chunk_count=$(cat chunk_count.txt)" >> $GITHUB_OUTPUT
@@ -26,7 +26,7 @@ jobs:
           path: page_chunks/
           retention-days: 1
 
-  # ── Phase 2: Scrape chunks in parallel (each = fresh IP) ─────────────────
+  # ── Phase 2: Each chunk on its own runner = fresh IP ─────────────────────
   scrape:
     needs: discover
     runs-on: ubuntu-latest
@@ -39,70 +39,72 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-      - run: pip install -r requirements.txt
+      - run: pip install requests beautifulsoup4 lxml
 
       - uses: actions/download-artifact@v4
         with:
           name: page-chunks
           path: page_chunks/
 
-      # Restore progress checkpoint if this is a resumed run
-      - name: Restore progress checkpoint
+      # Try to restore a saved checkpoint for this chunk (only exists on resume)
+      - name: Restore checkpoint
         uses: actions/download-artifact@v4
         with:
           name: progress-chunk-${{ matrix.chunk }}
           path: .
-        continue-on-error: true   # fine if no checkpoint exists yet
+        continue-on-error: true
 
-      - name: Scrape chunk ${{ matrix.chunk }}
+      # Run scraper — captures exit code into output, job itself always exits 0
+      - name: Scrape
         id: scrape
         run: |
           if [ -f progress.json ]; then
-            echo "Resuming from checkpoint..."
             python stock_sync_scrape.py --chunk ${{ matrix.chunk }} --resume
           else
             python stock_sync_scrape.py --chunk ${{ matrix.chunk }}
           fi
-        continue-on-error: true   # don't fail the job on exit(2)
+          echo "exit_code=$?" >> $GITHUB_OUTPUT
+          exit 0
 
-      # Upload whatever results we got (even partial)
+      # Always upload whatever results we got (full or partial)
       - uses: actions/upload-artifact@v4
+        if: always()
         with:
           name: chunk-result-${{ matrix.chunk }}
           path: chunk_results/
           retention-days: 1
 
-      # If blocked (exit code 2): save checkpoint and self-trigger new run
+      # Only if exit code was exactly 2 (genuine block, not a crash):
+      # save checkpoint and trigger ONE new coordinator run to resume
       - name: Save checkpoint on block
-        if: steps.scrape.outcome == 'failure'
+        if: steps.scrape.outputs.exit_code == '2'
         uses: actions/upload-artifact@v4
         with:
           name: progress-chunk-${{ matrix.chunk }}
           path: progress.json
-          retention-days: 1
+          retention-days: 2
 
-      - name: Self-trigger new run if blocked
-        if: steps.scrape.outcome == 'failure'
+      - name: Trigger resume run on block
+        if: steps.scrape.outputs.exit_code == '2'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          echo "Chunk ${{ matrix.chunk }} was blocked — triggering new workflow run to resume..."
+          echo "Chunk ${{ matrix.chunk }} blocked — triggering one resume run..."
           gh workflow run stock_sync_coordinator.yml \
             --repo ${{ github.repository }} \
             --ref ${{ github.ref_name }}
 
-  # ── Phase 3: Merge + update Shopify (only runs if scrape succeeded) ───────
+  # ── Phase 3: Merge all chunks + update Shopify ───────────────────────────
   update_shopify:
     needs: scrape
     runs-on: ubuntu-latest
-    # Only run if at least some chunks succeeded (not all failed)
     if: always()
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-      - run: pip install -r requirements.txt
+      - run: pip install requests beautifulsoup4 lxml
 
       - name: Download all chunk results
         uses: actions/download-artifact@v4

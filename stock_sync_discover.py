@@ -1,16 +1,12 @@
 """
 stock_sync_discover.py
 ======================
-Phase 1: Discovers all subcategories and listing pages from partworks.de,
-then splits them into chunks for parallel scraping.
-
-Each chunk gets its own GitHub Actions runner = fresh IP.
+Phase 1 — discovers all subcategories and listing pages,
+splits into chunks of CHUNK_SIZE pages each.
 
 Outputs:
-    page_chunks/chunk_000.json   — list of URLs for chunk 0
-    page_chunks/chunk_001.json   — list of URLs for chunk 1
-    ...
-    chunk_count.txt              — JSON array like [0,1,2,3] for matrix strategy
+    page_chunks/chunk_000.json, chunk_001.json ...
+    chunk_count.txt  e.g. [0,1,2,3,4]
 """
 
 import json
@@ -27,12 +23,12 @@ from bs4 import BeautifulSoup
 
 # ── Config ────────────────────────────────────────────────────────────────────
 
-BASE_URL     = "https://partworks.de"
-MAX_WORKERS  = 8
-REQ_DELAY    = (0.5, 1.2)   # polite during discovery
-REQ_TIMEOUT  = 15
-MAX_RETRIES  = 3
-CHUNK_SIZE   = 400           # pages per chunk (each chunk = 1 runner = fresh IP)
+BASE_URL    = "https://partworks.de"
+CHUNK_SIZE  = 300        # pages per chunk — each chunk = 1 runner = fresh IP
+MAX_WORKERS = 6          # polite during discovery
+REQ_DELAY   = (1.0, 2.5)
+REQ_TIMEOUT = 20
+MAX_RETRIES = 4
 
 ALL_CATEGORIES = [
     "/Porsche/356-spare-parts",
@@ -63,59 +59,62 @@ ALL_CATEGORIES = [
 
 USER_AGENTS = [
     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
-    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36",
     "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
     "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:125.0) Gecko/20100101 Firefox/125.0",
 ]
 
 logging.basicConfig(level=logging.WARNING)
 print_lock = Lock()
-
-def tprint(*args):
-    with print_lock:
+def tprint(*args): 
+    with print_lock: 
         print(*args, flush=True)
 
-def make_session() -> requests.Session:
-    s = requests.Session()
-    s.headers.update({
-        "User-Agent": random.choice(USER_AGENTS),
-        "Accept-Language": "en-GB,en;q=0.9",
-        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
-    })
-    return s
+import threading
+_local = threading.local()
 
-def fetch(url: str, session: requests.Session = None):
-    if session is None:
-        session = make_session()
+def get_session():
+    if not hasattr(_local, "s"):
+        s = requests.Session()
+        s.headers.update({
+            "User-Agent":      random.choice(USER_AGENTS),
+            "Accept-Language": "en-GB,en;q=0.9",
+            "Accept":          "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+            "Referer":         "https://partworks.de/",
+        })
+        _local.s = s
+    return _local.s
+
+def fetch(url: str):
     for attempt in range(MAX_RETRIES):
         try:
             time.sleep(random.uniform(*REQ_DELAY))
-            r = session.get(url, timeout=REQ_TIMEOUT)
+            r = get_session().get(url, timeout=REQ_TIMEOUT)
             if r.status_code == 200:
                 return BeautifulSoup(r.text, "html.parser")
             elif r.status_code == 429:
                 wait = 30 * (attempt + 1)
-                tprint(f"  [429] rate limited — sleeping {wait}s")
+                tprint(f"  [429] sleeping {wait}s")
                 time.sleep(wait)
             else:
-                tprint(f"  [HTTP {r.status_code}] {url}")
+                tprint(f"  [HTTP {r.status_code}] {url[:70]}")
                 return None
         except Exception as e:
             if attempt < MAX_RETRIES - 1:
-                time.sleep(2 ** attempt)
+                time.sleep(3 ** attempt)
             else:
                 logging.warning(f"Failed: {url} — {e}")
                 return None
     return None
 
-def get_subcats_for_category(category: str) -> list[str]:
+def get_subcats(category: str) -> list[str]:
     soup = fetch(BASE_URL + category)
     if not soup:
         return [BASE_URL + category]
     urls = [a.get("href", "") for a in soup.select(".et-sub-category a.et-sub-category-link-wrapper") if a.get("href")]
     return urls if urls else [BASE_URL + category]
 
-def get_listing_pages(subcat_url: str) -> list[str]:
+def get_pages(subcat_url: str) -> list[str]:
     soup = fetch(subcat_url)
     if not soup:
         return [subcat_url]
@@ -133,29 +132,29 @@ def main():
     print("Stuttgart Spares — Discovery Phase")
     print("=" * 65)
 
-    # Phase 1: subcategories
-    print("\n── Phase 1: Discovering subcategories ──────────────────────")
+    # Phase 1 — subcategories
+    print("\n── Phase 1: Subcategories ───────────────────────────────────")
     all_subcats, seen, lock = [], set(), Lock()
 
     def fetch_cat(cat):
-        urls = get_subcats_for_category(cat)
+        urls = get_subcats(cat)
         with lock:
             new = [u for u in urls if u not in seen]
             seen.update(new)
             all_subcats.extend(new)
-            tprint(f"  {cat:<50} → {len(new)} subcategories")
+            tprint(f"  {cat:<50} → {len(new)} subcats")
 
     with ThreadPoolExecutor(max_workers=MAX_WORKERS) as ex:
         list(as_completed([ex.submit(fetch_cat, c) for c in ALL_CATEGORIES]))
 
     print(f"\n  Total subcategories: {len(all_subcats)}")
 
-    # Phase 2: listing pages
-    print("\n── Phase 2: Collecting listing pages ───────────────────────")
+    # Phase 2 — listing pages
+    print("\n── Phase 2: Listing pages ───────────────────────────────────")
     all_pages, seen2, lock2, done = [], set(), Lock(), [0]
 
     def collect(url):
-        pages = get_listing_pages(url)
+        pages = get_pages(url)
         with lock2:
             for p in pages:
                 if p not in seen2:
@@ -170,26 +169,22 @@ def main():
 
     print(f"  Total listing pages: {len(all_pages)}")
 
-    # Phase 3: split into chunks
+    # Phase 3 — split into chunks
     print(f"\n── Splitting into chunks of {CHUNK_SIZE} pages ─────────────────")
     Path("page_chunks").mkdir(exist_ok=True)
 
-    chunks = [all_pages[i:i + CHUNK_SIZE] for i in range(0, len(all_pages), CHUNK_SIZE)]
-    chunk_indices = []
+    chunks  = [all_pages[i:i + CHUNK_SIZE] for i in range(0, len(all_pages), CHUNK_SIZE)]
+    indices = list(range(len(chunks)))
 
     for i, chunk in enumerate(chunks):
-        chunk_file = f"page_chunks/chunk_{i:03d}.json"
-        with open(chunk_file, "w", encoding="utf-8") as f:
+        with open(f"page_chunks/chunk_{i:03d}.json", "w", encoding="utf-8") as f:
             json.dump(chunk, f)
-        chunk_indices.append(i)
         print(f"  chunk_{i:03d}.json → {len(chunk)} pages")
 
-    # Write chunk count for matrix strategy
     with open("chunk_count.txt", "w") as f:
-        f.write(json.dumps(chunk_indices))
+        f.write(json.dumps(indices))
 
-    print(f"\n  ✓ {len(chunks)} chunks written")
-    print(f"  chunk_count.txt → {json.dumps(chunk_indices)}")
+    print(f"\n  ✓ {len(chunks)} chunks ready → chunk_count={json.dumps(indices)}")
 
 if __name__ == "__main__":
     main()
