@@ -71,7 +71,20 @@ def fetch(url: str):
             r = get_session().get(url, timeout=REQ_TIMEOUT)
             if r.status_code == 200:
                 body = r.text.lower()
-                if any(x in body for x in ["captcha", "access denied", "too many requests", "blocked"]):
+                # Only trigger on definitive block pages — NOT on words appearing in product text
+                # Check page is suspiciously short (real pages are 50KB+) OR has block-specific phrases
+                is_block_page = (
+                    len(r.text) < 5000  # real listing pages are always much larger
+                    and any(x in body for x in [
+                        "captcha",
+                        "access denied",
+                        "too many requests",
+                        "rate limit",
+                        "please verify",
+                        "unusual traffic",
+                    ])
+                )
+                if is_block_page:
                     print(f"  [SOFT BLOCK] {url[:80]}", flush=True)
                     return None
                 return BeautifulSoup(r.text, "html.parser")
