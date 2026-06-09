@@ -855,5 +855,19 @@
         "timestamp": "2026-06-09T09:18:35.885220"
       }
     ]
+  },
+  {
+    "run_at": "2026-06-09T14:49:03.259841",
+    "elapsed_sec": 5.1,
+    "partworks_skus": 156,
+    "pages_done": 24,
+    "pages_total": 24,
+    "blocked_chunks": [],
+    "shopify_products": 1841,
+    "not_found_on_partworks": 1809,
+    "no_change": 32,
+    "updated": 0,
+    "errors": 0,
+    "changes": []
   }
 ]
