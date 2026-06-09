@@ -1,0 +1,125 @@
+name: Stock Sync Coordinator
+
+on:
+  schedule:
+    - cron: '0 16 * * *'
+  workflow_dispatch:
+
+jobs:
+  # ── Phase 1: Discover all pages and split into chunks ─────────────────────
+  discover:
+    runs-on: ubuntu-latest
+    outputs:
+      chunk_count: ${{ steps.split.outputs.chunk_count }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install -r requirements.txt
+      - run: python stock_sync_discover.py
+      - id: split
+        run: echo "chunk_count=$(cat chunk_count.txt)" >> $GITHUB_OUTPUT
+      - uses: actions/upload-artifact@v4
+        with:
+          name: page-chunks
+          path: page_chunks/
+          retention-days: 1
+
+  # ── Phase 2: Scrape chunks in parallel (each = fresh IP) ─────────────────
+  scrape:
+    needs: discover
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        chunk: ${{ fromJson(needs.discover.outputs.chunk_count) }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install -r requirements.txt
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: page-chunks
+          path: page_chunks/
+
+      # Restore progress checkpoint if this is a resumed run
+      - name: Restore progress checkpoint
+        uses: actions/download-artifact@v4
+        with:
+          name: progress-chunk-${{ matrix.chunk }}
+          path: .
+        continue-on-error: true   # fine if no checkpoint exists yet
+
+      - name: Scrape chunk ${{ matrix.chunk }}
+        id: scrape
+        run: |
+          if [ -f progress.json ]; then
+            echo "Resuming from checkpoint..."
+            python stock_sync_scrape.py --chunk ${{ matrix.chunk }} --resume
+          else
+            python stock_sync_scrape.py --chunk ${{ matrix.chunk }}
+          fi
+        continue-on-error: true   # don't fail the job on exit(2)
+
+      # Upload whatever results we got (even partial)
+      - uses: actions/upload-artifact@v4
+        with:
+          name: chunk-result-${{ matrix.chunk }}
+          path: chunk_results/
+          retention-days: 1
+
+      # If blocked (exit code 2): save checkpoint and self-trigger new run
+      - name: Save checkpoint on block
+        if: steps.scrape.outcome == 'failure'
+        uses: actions/upload-artifact@v4
+        with:
+          name: progress-chunk-${{ matrix.chunk }}
+          path: progress.json
+          retention-days: 1
+
+      - name: Self-trigger new run if blocked
+        if: steps.scrape.outcome == 'failure'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "Chunk ${{ matrix.chunk }} was blocked — triggering new workflow run to resume..."
+          gh workflow run stock_sync_coordinator.yml \
+            --repo ${{ github.repository }} \
+            --ref ${{ github.ref_name }}
+
+  # ── Phase 3: Merge + update Shopify (only runs if scrape succeeded) ───────
+  update_shopify:
+    needs: scrape
+    runs-on: ubuntu-latest
+    # Only run if at least some chunks succeeded (not all failed)
+    if: always()
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install -r requirements.txt
+
+      - name: Download all chunk results
+        uses: actions/download-artifact@v4
+        with:
+          pattern: chunk-result-*
+          path: chunk_results/
+          merge-multiple: true
+
+      - name: Merge and update Shopify
+        run: python stock_sync_update.py
+        env:
+          SHOPIFY_TOKEN: ${{ secrets.SHOPIFY_TOKEN }}
+
+      - name: Commit logs
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add sync_log.json stock_map.json
+          git diff --staged --quiet || git commit -m "sync $(date -u +'%Y-%m-%d')"
+          git push
