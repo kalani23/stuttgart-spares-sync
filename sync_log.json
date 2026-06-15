@@ -1928,5 +1928,206 @@
     "updated": 0,
     "errors": 0,
     "changes": []
+  },
+  {
+    "run_at": "2026-06-15T21:16:33.500157",
+    "elapsed_sec": 61.7,
+    "partworks_skus": 9394,
+    "pages_done": 1798,
+    "pages_total": 2049,
+    "blocked_chunks": [
+      1
+    ],
+    "shopify_products": 1842,
+    "not_found_on_partworks": 33,
+    "no_change": 1786,
+    "updated": 23,
+    "errors": 0,
+    "changes": [
+      {
+        "sku": "5330",
+        "product_id": 10376697512279,
+        "from_qty": 2,
+        "to_qty": 0,
+        "in_stock": false,
+        "timestamp": "2026-06-15T21:16:05.553384"
+      },
+      {
+        "sku": "15133",
+        "product_id": 10895999992151,
+        "from_qty": 1,
+        "to_qty": 2,
+        "in_stock": true,
+        "timestamp": "2026-06-15T21:16:06.769359"
+      },
+      {
+        "sku": "8926",
+        "product_id": 10468791157079,
+        "from_qty": 2,
+        "to_qty": 0,
+        "in_stock": false,
+        "timestamp": "2026-06-15T21:16:07.980827"
+      },
+      {
+        "sku": "9238",
+        "product_id": 10895972237655,
+        "from_qty": 2,
+        "to_qty": 0,
+        "in_stock": false,
+        "timestamp": "2026-06-15T21:16:09.200461"
+      },
+      {
+        "sku": "7106",
+        "product_id": 10895974695255,
+        "from_qty": 2,
+        "to_qty": 0,
+        "in_stock": false,
+        "timestamp": "2026-06-15T21:16:10.465943"
+      },
+      {
+        "sku": "3356",
+        "product_id": 10896047374679,
+        "from_qty": 2,
+        "to_qty": 0,
+        "in_stock": false,
+        "timestamp": "2026-06-15T21:16:11.708165"
+      },
+      {
+        "sku": "1118",
+        "product_id": 10896135586135,
+        "from_qty": 1,
+        "to_qty": 2,
+        "in_stock": true,
+        "timestamp": "2026-06-15T21:16:12.914808"
+      },
+      {
+        "sku": "12079",
+        "product_id": 10896174055767,
+        "from_qty": 3,
+        "to_qty": 2,
+        "in_stock": true,
+        "timestamp": "2026-06-15T21:16:14.152554"
+      },
+      {
+        "sku": "14732",
+        "product_id": 10914870264151,
+        "from_qty": 2,
+        "to_qty": 0,
+        "in_stock": false,
+        "timestamp": "2026-06-15T21:16:15.349964"
+      },
+      {
+        "sku": "3282",
+        "product_id": 10895920365911,
+        "from_qty": 2,
+        "to_qty": 0,
+        "in_stock": false,
+        "timestamp": "2026-06-15T21:16:16.552013"
+      },
+      {
+        "sku": "15140",
+        "product_id": 10896027517271,
+        "from_qty": 2,
+        "to_qty": 0,
+        "in_stock": false,
+        "timestamp": "2026-06-15T21:16:17.808158"
+      },
+      {
+        "sku": "3316",
+        "product_id": 10896126148951,
+        "from_qty": 2,
+        "to_qty": 0,
+        "in_stock": false,
+        "timestamp": "2026-06-15T21:16:19.021095"
+      },
+      {
+        "sku": "8405",
+        "product_id": 10643855376727,
+        "from_qty": 2,
+        "to_qty": 0,
+        "in_stock": false,
+        "timestamp": "2026-06-15T21:16:20.232353"
+      },
+      {
+        "sku": "8580",
+        "product_id": 10534562890071,
+        "from_qty": 2,
+        "to_qty": 0,
+        "in_stock": false,
+        "timestamp": "2026-06-15T21:16:21.433917"
+      },
+      {
+        "sku": "8580",
+        "product_id": 10895758262615,
+        "from_qty": 2,
+        "to_qty": 0,
+        "in_stock": false,
+        "timestamp": "2026-06-15T21:16:22.667905"
+      },
+      {
+        "sku": "14976",
+        "product_id": 10895907488087,
+        "from_qty": 0,
+        "to_qty": 2,
+        "in_stock": true,
+        "timestamp": "2026-06-15T21:16:23.895150"
+      },
+      {
+        "sku": "5150",
+        "product_id": 10895897657687,
+        "from_qty": 0,
+        "to_qty": 2,
+        "in_stock": true,
+        "timestamp": "2026-06-15T21:16:25.099117"
+      },
+      {
+        "sku": "8580",
+        "product_id": 10627604250967,
+        "from_qty": 2,
+        "to_qty": 0,
+        "in_stock": false,
+        "timestamp": "2026-06-15T21:16:26.307598"
+      },
+      {
+        "sku": "17913",
+        "product_id": 10627605627223,
+        "from_qty": 2,
+        "to_qty": 0,
+        "in_stock": false,
+        "timestamp": "2026-06-15T21:16:27.500759"
+      },
+      {
+        "sku": "2557",
+        "product_id": 10640217145687,
+        "from_qty": 2,
+        "to_qty": 0,
+        "in_stock": false,
+        "timestamp": "2026-06-15T21:16:28.716909"
+      },
+      {
+        "sku": "9027",
+        "product_id": 10625942913367,
+        "from_qty": 0,
+        "to_qty": 2,
+        "in_stock": true,
+        "timestamp": "2026-06-15T21:16:29.923193"
+      },
+      {
+        "sku": "17913",
+        "product_id": 10625943273815,
+        "from_qty": 2,
+        "to_qty": 0,
+        "in_stock": false,
+        "timestamp": "2026-06-15T21:16:31.110506"
+      },
+      {
+        "sku": "4092",
+        "product_id": 10615188980055,
+        "from_qty": 2,
+        "to_qty": 0,
+        "in_stock": false,
+        "timestamp": "2026-06-15T21:16:32.300182"
+      }
+    ]
   }
 ]
