@@ -2143,5 +2143,19 @@
     "updated": 0,
     "errors": 0,
     "changes": []
+  },
+  {
+    "run_at": "2026-06-17T19:08:26.240442",
+    "elapsed_sec": 36.0,
+    "partworks_skus": 0,
+    "pages_done": 24,
+    "pages_total": 24,
+    "blocked_chunks": [],
+    "shopify_products": 1842,
+    "not_found_on_partworks": 1842,
+    "no_change": 0,
+    "updated": 0,
+    "errors": 0,
+    "changes": []
   }
 ]
